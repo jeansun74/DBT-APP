@@ -120,10 +120,6 @@
                 <i class="fa-solid fa-calendar-check"></i>
                 <span>每日日誌</span>
             </button>
-            <button onclick="switchTab('ai')" id="tab-ai" class="tab-btn flex-1 min-w-[80px] py-2.5 px-3 rounded-lg text-center transition flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900">
-                <i class="fa-solid fa-robot text-teal-600"></i>
-                <span>AI 教練</span>
-            </button>
             <button onclick="switchTab('stats')" id="tab-stats" class="tab-btn flex-1 min-w-[80px] py-2.5 px-3 rounded-lg text-center transition flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900">
                 <i class="fa-solid fa-chart-line"></i>
                 <span>統計追蹤</span>
@@ -327,44 +323,6 @@
             </div>
         </section>
 
-        <!-- TAB 4: GEMINI AI COACH -->
-        <section id="view-ai" class="tab-content hidden animate-fade-in space-y-6">
-            <div class="bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-100 p-5 rounded-2xl flex items-center justify-between gap-4">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 bg-teal-600 text-white rounded-xl flex items-center justify-center text-2xl flex-shrink-0 shadow-sm">
-                        <i class="fa-solid fa-robot"></i>
-                    </div>
-                    <div>
-                        <h2 class="text-lg font-bold text-slate-800">AI DBT 隨身輔導教練</h2>
-                        <p class="text-xs text-slate-600">告訴我你當前遭遇的困難或情緒狀態，AI 將為你推薦最適合的 DBT 技巧與行動指引。</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">描述你現在的情緒或面臨的情境：</label>
-                    <textarea id="aiUserPrompt" rows="3" placeholder="例如：我剛剛跟朋友提出不同意見，但他好像生氣了，我想溝通但不想失去自尊，也不想破壞感情..." class="w-full p-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
-                </div>
-
-                <div class="flex justify-end items-center">
-                    <button onclick="askAICoach()" id="aiSubmitBtn" class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-5 py-2.5 rounded-xl transition flex items-center gap-2 text-sm">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                        <span>尋求 DBT 技巧建議</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- AI Response Area -->
-            <div id="aiResultArea" class="hidden bg-white p-6 rounded-2xl border border-teal-200 shadow-sm space-y-4 animate-fade-in">
-                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
-                    <i class="fa-solid fa-brain text-teal-600 text-lg"></i>
-                    <h3 class="font-bold text-slate-800">AI 智慧心教練的建議</h3>
-                </div>
-                <div id="aiResponseText" class="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap"></div>
-            </div>
-        </section>
-
         <!-- TAB 5: STATS & ANALYTICS -->
         <section id="view-stats" class="tab-content hidden animate-fade-in space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -563,8 +521,6 @@
 
         const LOCAL_STORAGE_KEY = 'dbt_local_diary_entries';
         const LOCAL_USERNAME_KEY = 'dbt_local_username';
-        const LOCAL_APIKEY_KEY = 'dbt_local_gemini_apikey';
-        const EMBEDDED_API_KEY = 'AQ.Ab8RN6LlipEhU5GmMRuxHDMpNVnkI-0eTeHuhDXwqX5wNlyxEA';
 
         // DBT Skills Master Database
         const dbtSkills = [
@@ -1144,66 +1100,6 @@
                 container.appendChild(item);
             });
         }
-
-        window.askAICoach = async function() {
-            const userPrompt = document.getElementById('aiUserPrompt').value.trim();
-            if (!userPrompt) {
-                alert("請先輸入您當前的狀況或心情描述喔！");
-                return;
-            }
-
-            const apiKey = EMBEDDED_API_KEY;
-
-            const submitBtn = document.getElementById('aiSubmitBtn');
-            const resultArea = document.getElementById('aiResultArea');
-            const responseText = document.getElementById('aiResponseText');
-
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> 智慧心思考中...`;
-
-            resultArea.classList.remove('hidden');
-            responseText.innerText = "正在分析您的情境，請稍候...";
-
-            const systemPrompt = `你是一位溫和、專業且充滿同理心的 DBT (辯證行為治療) 心理輔導教練。
-請根據使用者提供的困境或情緒描述：
-1. 先給予一句溫暖、具接納性（Validation）的關懷。
-2. 推薦 1 到 2 個最合適的 DBT 技巧（例如：智慧心、了了分明技巧、STOP、TIPP、核對事實、相反行動、DEAR MAN、GIVE、FAST、認可與傳達理解技巧等）。
-3. 用條列式、簡單易懂的步驟說明現在可以立刻做出的行動。
-語氣請保持平穩、溫柔、不批判。`;
-
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey.trim()}`;
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: userPrompt }] }],
-                        systemInstruction: { parts: [{ text: systemPrompt }] }
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error?.message || `HTTP status ${response.status}`);
-                }
-
-                const data = await response.json();
-                const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-                if (resultText) {
-                    responseText.innerText = resultText;
-                } else {
-                    responseText.innerText = "抱歉，目前暫時無法取得建議，請稍後再試。";
-                }
-            } catch (err) {
-                console.error(err);
-                responseText.innerText = `連線發生錯誤：${err.message}\n請稍後再試。`;
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> 尋求 DBT 技巧建議`;
-            }
-        };
 
         function updateAnalytics() {
             document.getElementById('statTotalDays').innerText = diaryEntries.length;
