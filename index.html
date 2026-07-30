@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBT 智慧心生活 - 辯證行為治療技巧與練習日誌</title>
+    <!-- Mobile Web App Capable Meta Tags for Fullscreen / PWA -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="DBT 智慧心">
+    <meta name="mobile-web-app-capable" content="yes">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        teal: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                        },
+                        sage: {
+                            50: '#f4f7f4',
+                            100: '#e3ebe3',
+                            500: '#739072',
+                            700: '#4f644e',
+                        },
+                        lavender: {
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            700: '#4338ca',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', '"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- Top Header -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-teal-600 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-teal-200">
+                    <i class="fa-solid font-bold fa-brain"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-slate-800 leading-tight">DBT 智慧心生活</h1>
+                    <p class="text-xs text-slate-500">辯證行為治療 (DBT) 技巧教練</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <a id="hdrStandaloneBtn" href="#" target="_blank" rel="noopener noreferrer" title="在新分頁獨立開啟 APP（避免資料隨 Google Sites iframe 重整遺失）" class="bg-teal-50 hover:bg-teal-100 text-teal-700 text-xs font-semibold px-2.5 py-2 rounded-lg flex items-center gap-1.5 transition border border-teal-200">
+                    <i class="fa-solid fa-up-right-from-square text-sm"></i>
+                    <span class="hidden sm:inline">獨立頁面開啟</span>
+                </a>
+
+                <button onclick="toggleFullscreen()" id="fullscreenBtn" title="切換全螢幕模式" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold p-2 rounded-lg transition flex items-center justify-center">
+                    <i class="fa-solid fa-expand text-sm"></i>
+                </button>
+
+                <button onclick="openModal('loginModal')" id="userAuthBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-2 rounded-lg flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-circle-user text-teal-600 text-sm"></i>
+                    <span id="userStatusText">本機免登入模式</span>
+                </button>
+
+                <button onclick="openModal('sosModal')" class="bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold px-3 py-2 rounded-lg flex items-center gap-1.5 shadow-sm transition">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>SOS 危機平靜</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Body Container -->
+    <main class="max-w-4xl mx-auto px-4 py-6 w-full flex-grow">
+        
+        <!-- Google Sites / iframe Notification Banner -->
+        <div id="iframeNoticeBanner" class="hidden bg-amber-50 border border-amber-200 text-amber-900 p-4 mb-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs animate-fade-in">
+            <div class="flex items-start gap-2.5">
+                <i class="fa-solid fa-circle-info text-amber-600 text-base mt-0.5 flex-shrink-0"></i>
+                <div>
+                    <span class="font-bold text-amber-900 block">偵測到內嵌框架 (Google Sites / iframe)</span>
+                    <span class="text-amber-800">為確保您的日誌與統計數據能穩定永久保存在瀏覽器中，建議點擊右側按鈕切換至「獨立全螢幕」頁面操作！</span>
+                </div>
+            </div>
+            <a id="bannerStandaloneBtn" href="#" target="_blank" rel="noopener noreferrer" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-2 rounded-lg whitespace-nowrap transition shadow-sm self-end sm:self-auto flex items-center gap-1">
+                <i class="fa-solid fa-up-right-from-square"></i>
+                <span>獨立全螢幕開啟</span>
+            </a>
+        </div>
+
+        <!-- Tab Navigation Bar -->
+        <nav class="flex space-x-1 bg-slate-200/70 p-1 rounded-xl mb-6 text-sm font-medium hide-scrollbar overflow-x-auto">
+            <button onclick="switchTab('home')" id="tab-home" class="tab-btn flex-1 min-w-[80px] py-2.5 px-3 rounded-lg text-center transition flex items-center justify-center gap-2 bg-white text-teal-700 shadow-sm">
+                <i class="fa-solid fa-house"></i>
+                <span>首頁</span>
+            </button>
+            <button onclick="switchTab('library')" id="tab-library" class="tab-btn flex-1 min-w-[80px] py-2.5 px-3 rounded-lg text-center transition flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-book-open"></i>
+                <span>技巧庫</span>
+            </button>
+            <button onclick="switchTab('diary')" id="tab-diary" class="tab-btn flex-1 min-w-[80px] py-2.5 px-3 rounded-lg text-center transition flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>每日日誌</span>
+            </button>
+            <button onclick="switchTab('ai')" id="tab-ai" class="tab-btn flex-1 min-w-[80px] py-2.5 px-3 rounded-lg text-center transition flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-robot text-teal-600"></i>
+                <span>AI 教練</span>
+            </button>
+            <button onclick="switchTab('stats')" id="tab-stats" class="tab-btn flex-1 min-w-[80px] py-2.5 px-3 rounded-lg text-center transition flex items-center justify-center gap-2 text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>統計追蹤</span>
+            </button>
+        </nav>
+
+        <!-- TAB 1: HOME DASHBOARD -->
+        <section id="view-home" class="tab-content animate-fade-in space-y-6">
+            <!-- Welcome Banner -->
+            <div class="bg-gradient-to-br from-teal-600 to-teal-800 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
+                <div class="absolute -right-6 -bottom-6 opacity-10 text-9xl">
+                    <i class="fa-solid fa-yin-yang"></i>
+                </div>
+                <div class="relative z-10 max-w-lg">
+                    <span class="bg-teal-500/40 text-teal-100 text-xs px-2.5 py-1 rounded-full font-medium">DBT 核心哲學</span>
+                    <h2 class="text-2xl font-bold mt-2">接納當下的自己，同時致力於改變</h2>
+                    <p class="text-teal-100 text-sm mt-2 leading-relaxed">
+                        辯證行為治療 (DBT) 協助我們平衡「接納」與「改變」。透過每日練習，培養理智與情感交會的「智慧心 (Wise Mind)」。
+                    </p>
+                    <div class="mt-4 flex gap-3">
+                        <button onclick="switchTab('diary')" class="bg-white text-teal-800 hover:bg-teal-50 px-4 py-2 rounded-lg text-sm font-semibold transition">
+                            <i class="fa-solid fa-pen-to-square mr-1"></i> 今日練習登記
+                        </button>
+                        <button onclick="switchTab('library')" class="bg-teal-700 hover:bg-teal-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
+                            瀏覽技巧庫
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wise Mind Daily Prompt -->
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start gap-4">
+                <div class="p-3 bg-amber-50 text-amber-600 rounded-lg text-xl flex-shrink-0">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-slate-800">今日智慧心小提醒 (Wise Mind)</h3>
+                    <p class="text-slate-600 text-sm mt-1">「感受是真實的，但感受並不總是事實。」當情緒湧上時，試著暫停 3 秒，問問你的智慧心：現在最有效的行動是什麼？</p>
+                </div>
+            </div>
+
+            <!-- Quick Category Grid -->
+            <div>
+                <h3 class="font-bold text-slate-800 text-lg mb-3">DBT 四大核心技巧領域</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                    <!-- Card 1 -->
+                    <div onclick="showCategorySkills('mindfulness')" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:border-teal-500 hover:shadow-md transition cursor-pointer flex items-center justify-between group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl group-hover:scale-105 transition">
+                                <i class="fa-solid fa-spa"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">1. 了了分明技巧 (Mindfulness)</h4>
+                                <p class="text-xs text-slate-500 mt-1">「是什麼」與「如何做」了了分明覺察</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-teal-600 transition"></i>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div onclick="showCategorySkills('distress')" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:border-teal-500 hover:shadow-md transition cursor-pointer flex items-center justify-between group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl group-hover:scale-105 transition">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">2. 痛苦承受 (Distress Tolerance)</h4>
+                                <p class="text-xs text-slate-500 mt-1">危機處置，不讓情況變得更糟</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-teal-600 transition"></i>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div onclick="showCategorySkills('emotion')" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:border-teal-500 hover:shadow-md transition cursor-pointer flex items-center justify-between group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl group-hover:scale-105 transition">
+                                <i class="fa-solid fa-heart-pulse"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">3. 情緒調節 (Emotion Regulation)</h4>
+                                <p class="text-xs text-slate-500 mt-1">理解情緒、核對事實、相反行動</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-teal-600 transition"></i>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div onclick="showCategorySkills('interpersonal')" class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:border-teal-500 hover:shadow-md transition cursor-pointer flex items-center justify-between group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-xl group-hover:scale-105 transition">
+                                <i class="fa-solid fa-comments"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800">4. 人際效能 (Interpersonal)</h4>
+                                <p class="text-xs text-slate-500 mt-1">表達需求(DEAR MAN)、維護關係(GIVE)、自尊(FAST)與認可</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-300 group-hover:text-teal-600 transition"></i>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: SKILLS LIBRARY -->
+        <section id="view-library" class="tab-content hidden animate-fade-in space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800">DBT 完整技巧庫</h2>
+                    <p class="text-xs text-slate-500">點擊技能卡片查看詳細說明與實作步驟</p>
+                </div>
+                <!-- Filter Pills -->
+                <div class="flex gap-1.5 overflow-x-auto pb-1 text-xs">
+                    <button onclick="filterSkills('all')" data-category="all" class="skill-filter-btn bg-slate-800 text-white px-3 py-1.5 rounded-full font-medium transition-colors">全部</button>
+                    <button onclick="filterSkills('mindfulness')" data-category="mindfulness" class="skill-filter-btn bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full font-medium hover:bg-slate-200 transition-colors">了了分明</button>
+                    <button onclick="filterSkills('distress')" data-category="distress" class="skill-filter-btn bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full font-medium hover:bg-slate-200 transition-colors">痛苦承受</button>
+                    <button onclick="filterSkills('emotion')" data-category="emotion" class="skill-filter-btn bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full font-medium hover:bg-slate-200 transition-colors">情緒調節</button>
+                    <button onclick="filterSkills('interpersonal')" data-category="interpersonal" class="skill-filter-btn bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full font-medium hover:bg-slate-200 transition-colors">人際效能</button>
+                </div>
+            </div>
+
+            <!-- Skills List Grid -->
+            <div id="skillsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Injected via JavaScript -->
+            </div>
+        </section>
+
+        <!-- TAB 3: DAILY DIARY CARD -->
+        <section id="view-diary" class="tab-content hidden animate-fade-in space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">每日 DBT 練習登記</h2>
+                        <p class="text-xs text-slate-500">記錄今天的狀態與使用的技巧，累積成長軌跡</p>
+                    </div>
+                    <span id="diaryDateDisplay" class="text-xs font-semibold bg-slate-100 text-slate-600 px-3 py-1.5 rounded-lg"></span>
+                </div>
+
+                <form id="diaryForm" onsubmit="handleSaveDiary(event)" class="space-y-6">
+                    <!-- Rating Sliders -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Mood Slider -->
+                        <div class="bg-slate-50 p-4 rounded-xl">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-sm font-bold text-slate-700">整體心情分數 (1-10)</label>
+                                <span id="moodVal" class="text-lg font-bold text-teal-600">5</span>
+                            </div>
+                            <input type="range" id="moodInput" min="1" max="10" value="5" oninput="document.getElementById('moodVal').innerText = this.value" class="w-full accent-teal-600">
+                            <div class="flex justify-between text-xs text-slate-400 mt-1">
+                                <span>極度低落 (1)</span>
+                                <span>平穩 (5)</span>
+                                <span>非常愉快 (10)</span>
+                            </div>
+                        </div>
+
+                        <!-- Distress Slider -->
+                        <div class="bg-slate-50 p-4 rounded-xl">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-sm font-bold text-slate-700">最高困擾/壓力值 (1-10)</label>
+                                <span id="distressVal" class="text-lg font-bold text-rose-600">3</span>
+                            </div>
+                            <input type="range" id="distressInput" min="1" max="10" value="3" oninput="document.getElementById('distressVal').innerText = this.value" class="w-full accent-rose-600">
+                            <div class="flex justify-between text-xs text-slate-400 mt-1">
+                                <span>幾乎無壓力 (1)</span>
+                                <span>中度困擾 (5)</span>
+                                <span>無法承受 (10)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Skills Checklist -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">今天使用了哪些 DBT 技巧？（可多選）</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 text-xs" id="skillsChecklist">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Reflection / Notes -->
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1">心得與智慧心反思記錄</label>
+                        <textarea id="diaryNotes" rows="3" placeholder="例如：今天在溝通時使用了 GIVE 技巧展現理解，減少了敵意；並在離場時練習 FAST 保持自尊..." class="w-full p-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 rounded-xl transition shadow-md shadow-teal-100 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>儲存今日練習記錄</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- History Logs Section -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 class="font-bold text-slate-800 text-lg mb-4">歷史記錄</h3>
+                <div id="diaryHistoryList" class="space-y-3 max-h-80 overflow-y-auto pr-1">
+                    <!-- History items will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: GEMINI AI COACH -->
+        <section id="view-ai" class="tab-content hidden animate-fade-in space-y-6">
+            <div class="bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-100 p-5 rounded-2xl flex items-center gap-4">
+                <div class="w-12 h-12 bg-teal-600 text-white rounded-xl flex items-center justify-center text-2xl flex-shrink-0 shadow-sm">
+                    <i class="fa-solid fa-robot"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-slate-800">AI DBT 隨身輔導教練</h2>
+                    <p class="text-xs text-slate-600">告訴我你當前遭遇的困難或情緒狀態，AI 將為你推薦最適合的 DBT 技巧與行動指引。</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">描述你現在的情緒或面臨的情境：</label>
+                    <textarea id="aiUserPrompt" rows="3" placeholder="例如：我剛剛跟朋友提出不同意見，但他好像生氣了，我想溝通但不想失去自尊，也不想破壞感情..." class="w-full p-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+                </div>
+
+                <div class="flex justify-end">
+                    <button onclick="askAICoach()" id="aiSubmitBtn" class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-5 py-2.5 rounded-xl transition flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>尋求 DBT 技巧建議</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- AI Response Area -->
+            <div id="aiResultArea" class="hidden bg-white p-6 rounded-2xl border border-teal-200 shadow-sm space-y-4 animate-fade-in">
+                <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
+                    <i class="fa-solid fa-brain text-teal-600 text-lg"></i>
+                    <h3 class="font-bold text-slate-800">AI 智慧心教練的建議</h3>
+                </div>
+                <div id="aiResponseText" class="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap"></div>
+            </div>
+        </section>
+
+        <!-- TAB 5: STATS & ANALYTICS -->
+        <section id="view-stats" class="tab-content hidden animate-fade-in space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center">
+                    <span class="text-xs text-slate-500 font-medium">總練習天數</span>
+                    <p id="statTotalDays" class="text-3xl font-bold text-teal-600 mt-1">0</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center">
+                    <span class="text-xs text-slate-500 font-medium">平均心情指數</span>
+                    <p id="statAvgMood" class="text-3xl font-bold text-sky-600 mt-1">0.0</p>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center">
+                    <span class="text-xs text-slate-500 font-medium">最常用技巧</span>
+                    <p id="statTopSkill" class="text-lg font-bold text-amber-600 mt-2">尚無資料</p>
+                </div>
+            </div>
+
+            <!-- Chart -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h3 class="font-bold text-slate-800 text-base mb-4">心情與困擾值趨勢 (最近 7 次)</h3>
+                <div class="h-64 w-full">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- SOS Crisis Modal -->
+    <div id="sosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white max-w-md w-full rounded-2xl shadow-xl overflow-hidden animate-fade-in">
+            <div class="bg-rose-500 text-white p-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                    <h3 class="font-bold text-lg">SOS 危機速效平靜指引</h3>
+                </div>
+                <button onclick="closeModal('sosModal')" class="text-white/80 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="p-5 space-y-4 max-h-[80vh] overflow-y-auto">
+                <p class="text-xs text-slate-500">當前情緒極度高漲時（困擾值 > 7），請勿強求思考邏輯，先透過身體生理機制進行調節：</p>
+                
+                <!-- TIPP step 1 -->
+                <div class="bg-rose-50 p-4 rounded-xl border border-rose-100">
+                    <h4 class="font-bold text-rose-800 text-sm flex items-center gap-2">
+                        <span class="w-6 h-6 bg-rose-500 text-white rounded-full flex items-center justify-center text-xs">T</span>
+                        Temperature (改變體溫)
+                    </h4>
+                    <p class="text-xs text-slate-600 mt-1">用冷水洗臉，或用冰敷袋敷在眼眶下方 30 秒。這能迅速啟動「哺乳類潛水反射」，降低心率與交感神經興奮。</p>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                        <span class="w-6 h-6 bg-teal-600 text-white rounded-full flex items-center justify-center text-xs">S</span>
+                        STOP 暫停
+                    </h4>
+                    <p class="text-xs text-slate-600 mt-1">停下動作、後退一步、觀察現狀、以智慧心正念前進。</p>
+                </div>
+            </div>
+            <div class="bg-slate-50 p-4 border-t border-slate-100 flex justify-end">
+                <button onclick="closeModal('sosModal')" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-xs font-semibold">了解並關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Login & Account Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white max-w-md w-full rounded-2xl shadow-xl overflow-hidden animate-fade-in">
+            <div class="bg-teal-600 text-white p-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-user-gear text-xl"></i>
+                    <h3 class="font-bold text-lg">個人化設定與資料說明</h3>
+                </div>
+                <button onclick="closeModal('loginModal')" class="text-white/80 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 space-y-5">
+                <!-- User Profile Display Card -->
+                <div class="bg-teal-50 p-4 rounded-xl border border-teal-100">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-teal-600 text-white flex items-center justify-center font-bold text-lg flex-shrink-0">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="overflow-hidden flex-1">
+                            <h4 id="userDisplayNameDisplay" class="font-bold text-slate-800 text-sm truncate">智慧心夥伴</h4>
+                            <p class="text-xs text-slate-500 truncate">本機免登入模式</p>
+                            <span class="inline-block mt-1 bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-semibold">LocalStorage 自動儲存</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-shield-halved text-teal-600"></i>
+                        關於資料儲存與 Google Sites 說明
+                    </h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        【儲存機制】：資料預設儲存於瀏覽器（LocalStorage）。<br>
+                        【Google Sites 嵌入注意】：Google 協作平台使用嵌入式框架（iframe），瀏覽器可能會在重整時清空框架內的暫存。建議定期使用下方<b>備份功能</b>保存您的心靈日誌！
+                    </p>
+                </div>
+
+                <!-- Backup & Restore Section -->
+                <div class="border-t border-slate-100 pt-3 space-y-2">
+                    <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-display text-teal-600"></i>
+                        獨立視窗與全螢幕控制
+                    </h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <a id="modalStandaloneBtn" href="#" target="_blank" rel="noopener noreferrer" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold p-2 rounded-lg text-xs transition flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-up-right-from-square"></i> 在新分頁開啟
+                        </a>
+                        <button onclick="toggleFullscreen()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold p-2 rounded-lg text-xs transition border border-slate-200 flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-expand"></i> 切換全螢幕
+                        </button>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-3 space-y-2">
+                    <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+                        <i class="fa-solid fa-file-arrow-down text-teal-600"></i>
+                        日誌資料備份與還原
+                    </h4>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="exportData()" class="bg-teal-50 hover:bg-teal-100 text-teal-700 font-semibold p-2 rounded-lg text-xs transition border border-teal-200 flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-download"></i> 匯出日誌備份 (.json)
+                        </button>
+                        <label class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold p-2 rounded-lg text-xs transition border border-slate-200 flex items-center justify-center gap-1 cursor-pointer">
+                            <i class="fa-solid fa-upload"></i> 匯入備份資料
+                            <input type="file" id="importFileInput" accept=".json" onchange="importData(event)" class="hidden">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-3 space-y-2">
+                    <label class="block text-xs font-bold text-slate-700">自訂個人暱稱：</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="usernameInput" placeholder="例如：智慧心夥伴" class="flex-1 p-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+                        <button onclick="saveUsername()" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold px-4 py-2.5 rounded-lg text-xs transition flex-shrink-0">儲存稱呼</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 p-4 border-t border-slate-100 flex justify-end">
+                <button onclick="closeModal('loginModal')" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-xs font-semibold">確定關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Sites Standalone Guide Modal -->
+    <div id="googleSitesGuideModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white max-w-md w-full rounded-2xl shadow-xl overflow-hidden animate-fade-in">
+            <div class="bg-amber-500 text-white p-4 flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-circle-exclamation text-xl"></i>
+                    <h3 class="font-bold text-lg">Google Sites 內嵌說明</h3>
+                </div>
+                <button onclick="closeModal('googleSitesGuideModal')" class="text-white/80 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="p-5 space-y-4 text-xs text-slate-700 leading-relaxed">
+                <p class="font-bold text-slate-800 text-sm">為什麼無法在獨立新頁面開啟？</p>
+                <p>因為您目前是直接將 HTML 程式碼貼在 Google Sites 的「內嵌程式碼」中，Google 並未為此 HTML 檔案提供獨立的 Web 網址，因此瀏覽器基於安全性會禁止開啟沙盒新分頁。</p>
+                
+                <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl space-y-1.5 text-amber-900">
+                    <p class="font-bold">💡 建議的兩種最佳使用方式：</p>
+                    <ol class="list-decimal pl-4 space-y-1">
+                        <li><b>直接使用全螢幕功能</b>：點擊 APP 右上角「全螢幕按鈕」即可放大畫面操作。</li>
+                        <li><b>免費獲得獨立網址</b>：將此 `index.html` 檔案免費上傳至 <b>GitHub Pages</b> 或 <b>Vercel</b>，再將產生的專屬網址貼入 Google Sites，即可完美實現跨裝置 100% 獨立新頁面開啟與持久儲存！</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 p-4 border-t border-slate-100 flex justify-end">
+                <button onclick="closeModal('googleSitesGuideModal')" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-xs font-semibold">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skill Detail Modal -->
+    <div id="skillDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white max-w-lg w-full rounded-2xl shadow-xl overflow-hidden animate-fade-in flex flex-col max-h-[85vh]">
+            <div id="modalHeader" class="p-4 bg-teal-600 text-white flex justify-between items-center">
+                <h3 id="modalSkillTitle" class="font-bold text-lg">技巧名稱</h3>
+                <button onclick="closeModal('skillDetailModal')" class="text-white/80 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <div id="modalSkillContent" class="p-6 space-y-4 overflow-y-auto text-sm text-slate-700">
+                <!-- Content Injected dynamically -->
+            </div>
+
+            <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
+                <span id="modalSkillCategory" class="text-xs text-slate-500 font-medium"></span>
+                <button onclick="closeModal('skillDetailModal')" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-xs font-semibold">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-12 py-4 text-center text-xs text-slate-400">
+        <p>DBT 智慧心生活 - 大眾心靈練習輔助工具 | 本工具僅供自我練習，無法取代專業心理治療</p>
+    </footer>
+
+    <script>
+        // Global variables for local app state
+        let diaryEntries = [];
+        let currentSkillFilter = 'all';
+        let trendChartInstance = null;
+
+        const LOCAL_STORAGE_KEY = 'dbt_local_diary_entries';
+        const LOCAL_USERNAME_KEY = 'dbt_local_username';
+
+        // DBT Skills Master Database
+        const dbtSkills = [
+            // 了了分明 (Mindfulness)
+            {
+                id: 'wise-mind',
+                category: 'mindfulness',
+                title: '智慧心 (Wise Mind) — 尋找理智與情感的交會',
+                short: '融合「情緒心」與「理智心」，找出內心深處最直覺、最有效的平衡點。',
+                desc: '智慧心是情緒心（情感主導）與理智心（邏輯主導）重疊交會的狀態。它既能接納感受，又能理性思考，做出符合長期利益的決定。',
+                steps: [
+                    '找一個安靜的空間，坐姿舒適，閉上眼睛深呼吸。',
+                    '注意吸氣與呼氣時腹部的起伏，將注意力帶回身體當下。',
+                    '在心中問自己一個問題（例如：「我現在該怎麼處理這件事？」）。',
+                    '不要強求立刻得到答案，觀察內心浮現的直覺聲音，尋找兼具理性與感性的平靜解法。'
+                ]
+            },
+            {
+                id: 'what-observe',
+                category: 'mindfulness',
+                title: '「是什麼」技巧：觀察 (Observe)',
+                short: '單純注意到內外在經驗，不嘗試推開、不強行抓緊、不加評斷。',
+                desc: '就像海浪湧來又退去，單純去「覺察」身體感覺、思緒與周遭環境，只是觀照而不陷入其中。',
+                steps: [
+                    '注意你的五感：看見什麼、聽見什麼、身體皮膚接觸到什麼。',
+                    '留意腦中浮現的念頭或情緒，像看雲朵飄過天空一樣看著它們。',
+                    '不評判好壞，也不嘗試改變它，只是單純地「注意到」它的存在。'
+                ]
+            },
+            {
+                id: 'what-describe',
+                category: 'mindfulness',
+                title: '「是什麼」技巧：描述 (Describe)',
+                short: '用純粹客觀的語言貼標籤與事實描述，不加入個人揣測與評價。',
+                desc: '將觀察到的事物用客觀事實言語化，明確區分「客觀事實」與「主觀想像」。',
+                steps: [
+                    '當情緒出現時，在心中告訴自己：「我注意到我現在感到胸口發緊」或「我產生了焦慮的念頭」。',
+                    '只描述能被攝影機拍到的事實（如：「他沒有回訊息」而不是「他不關心我」）。',
+                    '避免使用「總是」、「從不」、「糟糕」等極端評價詞彙。'
+                ]
+            },
+            {
+                id: 'what-participate',
+                category: 'mindfulness',
+                title: '「是什麼」技巧：參與 (Participate)',
+                short: '全心全意投身於當前的活動中，拋開自我意識與戒心。',
+                desc: '融入當下的情境或活動，讓自己與活動合而為一，不感到彆扭或退縮。',
+                steps: [
+                    '選擇你現在正在做的事情（如洗碗、走路、聆聽友人說話）。',
+                    '將 100% 的注意力投射到活動中，忘卻「別人會怎麼看我」的顧慮。',
+                    '如果分心了，溫和地將注意力拉回到當下的動作與感受。'
+                ]
+            },
+            {
+                id: 'how-nonjudgmental',
+                category: 'mindfulness',
+                title: '「如何做」技巧：不評斷 (Non-judgmentally)',
+                short: '只專注於客觀事實，不去劃分好壞、對錯、美醜或優劣。',
+                desc: '評斷往往會加劇情緒痛苦。練習接受事物「原本的樣子」，區分評價與感受。',
+                steps: [
+                    '意識到自己說出「這很糟糕」、「我不該這樣」、「他是壞人」等評判語。',
+                    '將評判替換為客觀的事實與感受說明（例如：替換成「這不符合我的預期，我感到失望」）。',
+                    '也不要評判自己的「評判」，接納自己會有評價的傾向並輕柔放手。'
+                ]
+            },
+            {
+                id: 'how-one-mindful',
+                category: 'mindfulness',
+                title: '「如何做」技巧：專一的做 (One-mindfully)',
+                short: '一次只做一件事，將全副心思放在當下的行動上。',
+                desc: '避免一心多用。吃飯就專心吃飯，走路就專心走路，讓大腦從多工作業的疲憊中解放。',
+                steps: [
+                    '專注於眼前正在處理的單一任務。',
+                    '當雜念或想要同時做別事的衝動產生時，注意到它，然後放掉它。',
+                    '重新把心力收回當前這一步。'
+                ]
+            },
+            {
+                id: 'how-effective',
+                category: 'mindfulness',
+                title: '「如何做」技巧：有效的做 (Effectively)',
+                short: '專注於「有效」而非「誰對誰錯」，不做自掘墳墓的行為。',
+                desc: '放棄非要證明自己是對的或堅持規則的執念，選擇能達成長期目標的最佳行動。',
+                steps: [
+                    '明確你當前真正的目標是什麼（維護關係？解決問題？）。',
+                    '問自己：「我現在的反應能幫助我達到目標，還是會讓情況變糟？」',
+                    '順應現實狀況，靈活調整策略，不做意氣之爭。'
+                ]
+            },
+            // 痛苦承受 (Distress Tolerance)
+            {
+                id: 'stop-skill',
+                category: 'distress',
+                title: 'STOP 技巧 — 衝動時的煞車機制',
+                short: 'Stop (暫停)、Take a step back (後退)、Observe (觀察)、Proceed mindfully (智慧正念前進)',
+                desc: '當情緒衝動湧上時，阻止自己做出讓情況變糟的強烈反應。',
+                steps: [
+                    'S (Stop)：立即凍結身體，不要動、不要說話、不要發訊息。',
+                    'T (Take a step back)：實體或心理後退一步，深呼吸，放開掌控感。',
+                    'O (Observe)：觀察內在情緒與外在環境的事實，不要急著下結論。',
+                    'P (Proceed mindfully)：問智慧心：「現在做什麼能改善情況或保護自己？」然後有意識地執行。'
+                ]
+            },
+            {
+                id: 'tipp-skill',
+                category: 'distress',
+                title: 'TIPP 技巧 — 生理級速效降溫',
+                short: 'Temperature (體溫)、Intense exercise (高強度運動)、Paced breathing (節奏呼吸)、Paired muscle relaxation (肌肉放鬆)',
+                desc: '透過直接調節身體副交感神經，在 幾分鐘內 降低極高強度的情緒危機（情緒值 > 7）。',
+                steps: [
+                    'T (體溫)：用冷水洗臉，或將冰敷袋/冰毛巾敷在眼睛下方與雙頰 30 秒。',
+                    'I (運動)：進行 10-15 分鐘高強度運動（如跳繩、開合跳、快跑），消耗過度激增的腎上腺素。',
+                    'P (節奏呼吸)：吸氣 4 秒，吐氣 6-8 秒，讓吐氣時間長於吸氣時間。',
+                    'P (肌肉放鬆)：用力緊繃某一組肌肉（如拳頭），維持 5 秒後徹底鬆開，感受放鬆感。'
+                ]
+            },
+            // 情緒調節 (Emotion Regulation)
+            {
+                id: 'check-facts',
+                category: 'emotion',
+                title: '核對事實 (Check the Facts)',
+                short: '檢查你的情緒與想法是否真的符合當前現實，降低不必要的過度反應。',
+                desc: '我們的想法與推測常會放大情緒。透過核對事實，確認情緒反應是否與事件嚴重程度相符。',
+                steps: [
+                    '明確寫下誘發情緒的事件是什麼（不包含任何推測）。',
+                    '寫下自己的詮釋與推論（例如：「他沒回訊息＝討厭我」）。',
+                    '思考其他可能的客觀解釋（例如：「他可能正在開車或忙碌中」）。',
+                    '重新評估：我的情緒強度是否過度反應了事實？'
+                ]
+            },
+            {
+                id: 'opposite-action',
+                category: 'emotion',
+                title: '相反行動 (Opposite Action)',
+                short: '當情緒不符合事實或無效時，採取與情緒衝動完全相反的行動。',
+                desc: '情緒會驅使我們做出特定行為（如害怕時逃跑、生氣時攻擊）。當這種衝動無效時，做相反的動作能改變大腦的情緒神經迴路。',
+                steps: [
+                    '識別情緒衝動（例如：生氣想罵人、憂鬱想躲在床上）。',
+                    '評估此衝動是否有效？如果不有效，決定採取相反行動。',
+                    '完全且徹底地做相反動作（生氣時：保持距離、語氣放軟；憂鬱時：起身出門散步）。'
+                ]
+            },
+            // 人際效能 (Interpersonal)
+            {
+                id: 'dear-man',
+                category: 'interpersonal',
+                title: 'DEAR MAN 技巧 — 達成目標與請求',
+                short: 'Describe(描述)、Express(表達)、Assert(堅定)、Reinforce(強化)、Mindful(正念專一)、Appear confident(自信)、Negotiate(協商)',
+                desc: '用於需要向他人提出請求、設定界線或拒絕無理要求時，同時維持良好的個人立場。',
+                steps: [
+                    'D (Describe)：客觀描述狀況事實。',
+                    'E (Express)：明確表達自己的感受或看法（使用「我」開頭）。',
+                    'A (Assert)：清楚直接地提出要求或明確說「不」。',
+                    'R (Reinforce)：說明滿足此要求對雙方的積極好處。',
+                    'M (Mindful)：保持專一，像壞掉的唱片般重複核心訴求，不受對方轉移話題影響。',
+                    'A (Appear confident)：維持眼神接觸、語氣堅定平穩。',
+                    'N (Negotiate)：願意彈性協商，尋求雙贏方案。'
+                ]
+            },
+            {
+                id: 'give-skill',
+                category: 'interpersonal',
+                title: 'GIVE 技巧 — 維護良好關係',
+                short: 'Gentle(溫和)、Interested(興趣)、Validate(認可)、Easy manner(輕鬆態度)',
+                desc: '在溝通中維護與對方的關係，讓對方感到受尊重、被聽見與被重視。',
+                steps: [
+                    'G (Gentle)：保持溫和，不攻擊、不威脅、不判決對方。',
+                    'I (Interested)：展現真誠興趣，傾聽對方的觀點，不插嘴。',
+                    'V (Validate)：認可與同理對方的感受與立場（「我明白你為什麼會這樣想」）。',
+                    'E (Easy manner)：保持輕鬆開放的態度，適度展現幽默與包容。'
+                ]
+            },
+            {
+                id: 'fast-skill',
+                category: 'interpersonal',
+                title: 'FAST 技巧 — 維護個人自尊',
+                short: 'Fair(公平)、Apologies-free(不過度道歉)、Stick to values(堅守價值)、Truthful(真實誠實)',
+                desc: '在人際互動中保持自我尊嚴，不為了迎合他人而犧牲個人價值觀。',
+                steps: [
+                    'F (Fair)：對自己公平，也對對方公平。',
+                    'A (Apologies-free)：不為表達自己的感受、需求或立場而輕易道歉。',
+                    'S (Stick to values)：堅守自己的核心價值觀與信念，不輕易妥協妥協底線。',
+                    'T (Truthful)：保持真誠與誠實，不誇大、不找藉口或撒謊。'
+                ]
+            },
+            {
+                id: 'validation-skill',
+                category: 'interpersonal',
+                title: '認可與傳達理解 (Validation)',
+                short: '傳達對他人感受或經歷的理解，即使你並不完全贊同對方的行為。',
+                desc: '認可不代表同意行為，而是承認對方情緒與反應的合理性，是降低人際衝突的最強工具。',
+                steps: [
+                    '全神貫注：給予完全的注意力，放下手機，眼神接觸。',
+                    '精準反映：重述你聽到的事實與情緒（「聽起來這件事讓你感到非常委屈」）。',
+                    '讀懂未說出口的話：覺察對方的肢體語言，同理隱藏的感受。',
+                    '尋找合理性：考慮對方的過去背景或生理狀態，表達理解（「考量到你昨晚沒睡好，會生氣是很正常的」）。'
+                ]
+            }
+        ];
+
+        function initApp() {
+            loadLocalUserData();
+            loadLocalDiaryData();
+
+            const todayStr = new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' });
+            document.getElementById('diaryDateDisplay').innerText = todayStr;
+
+            setupStandaloneLinks();
+            renderSkillsLibrary();
+            renderSkillsChecklist();
+            checkIframeEmbed();
+        }
+
+        // Setup real <a> link href tags or show Google Sites Sandbox modal if embedded as raw code
+        function setupStandaloneLinks() {
+            const currentUrl = window.location.href;
+            const isGoogleSandbox = currentUrl.includes('googleusercontent.com') || currentUrl.startsWith('data:') || currentUrl.startsWith('about:');
+
+            const linkIds = ['hdrStandaloneBtn', 'bannerStandaloneBtn', 'modalStandaloneBtn'];
+            
+            linkIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    if (isGoogleSandbox) {
+                        // If raw embed inside Google Sites, prevent navigation error and show helpful guide
+                        el.removeAttribute('href');
+                        el.removeAttribute('target');
+                        el.style.cursor = 'pointer';
+                        el.onclick = function(e) {
+                            e.preventDefault();
+                            openModal('googleSitesGuideModal');
+                        };
+                    } else {
+                        // If hosted on real Web host (GitHub Pages, Vercel, Netlify, etc.)
+                        el.href = currentUrl;
+                        el.target = '_blank';
+                        el.rel = 'noopener noreferrer';
+                        el.onclick = null;
+                    }
+                }
+            });
+        }
+
+        // Toggle standard browser Fullscreen mode with WebKit / Mobile iOS fallback
+        window.toggleFullscreen = function() {
+            const btn = document.getElementById('fullscreenBtn');
+            const doc = document.documentElement;
+            const isFS = document.fullscreenElement || document.webkitFullscreenElement;
+
+            if (!isFS) {
+                if (doc.requestFullscreen) {
+                    doc.requestFullscreen().then(() => {
+                        if (btn) btn.innerHTML = '<i class="fa-solid fa-compress text-sm"></i>';
+                    }).catch(() => {
+                        showFullscreenFallbackNotice();
+                    });
+                } else if (doc.webkitRequestFullscreen) {
+                    doc.webkitRequestFullscreen();
+                    if (btn) btn.innerHTML = '<i class="fa-solid fa-compress text-sm"></i>';
+                } else {
+                    showFullscreenFallbackNotice();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().then(() => {
+                        if (btn) btn.innerHTML = '<i class="fa-solid fa-compress text-sm"></i>';
+                    });
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                    if (btn) btn.innerHTML = '<i class="fa-solid fa-expand text-sm"></i>';
+                }
+            }
+        };
+
+        function showFullscreenFallbackNotice() {
+            alert("目前處於內嵌框架中。若點擊全螢幕無反應，建議您直接點擊 APP 右上角的全螢幕圖示，或使用「匯出日誌備份」保存練習紀錄！");
+        }
+
+        // Automatically detect if running inside Google Sites or any iframe
+        function checkIframeEmbed() {
+            try {
+                if (window.self !== window.top) {
+                    const banner = document.getElementById('iframeNoticeBanner');
+                    if (banner) banner.classList.remove('hidden');
+                }
+            } catch (e) {
+                const banner = document.getElementById('iframeNoticeBanner');
+                if (banner) banner.classList.remove('hidden');
+            }
+        }
+
+        function loadLocalUserData() {
+            let customName = localStorage.getItem(LOCAL_USERNAME_KEY);
+            if (!customName) {
+                customName = '智慧心夥伴';
+            }
+            document.getElementById('userStatusText').innerText = customName;
+            document.getElementById('userDisplayNameDisplay').innerText = customName;
+            document.getElementById('usernameInput').value = customName === '智慧心夥伴' ? '' : customName;
+        }
+
+        window.saveUsername = function() {
+            const nameInput = document.getElementById('usernameInput').value.trim();
+            const newName = nameInput || '智慧心夥伴';
+            
+            try {
+                localStorage.setItem(LOCAL_USERNAME_KEY, newName);
+            } catch(e) {
+                console.warn("Could not save username to LocalStorage:", e);
+            }
+            
+            document.getElementById('userStatusText').innerText = newName;
+            document.getElementById('userDisplayNameDisplay').innerText = newName;
+            closeModal('loginModal');
+        };
+
+        // Export Diary Data as JSON file
+        window.exportData = function() {
+            if (diaryEntries.length === 0) {
+                alert("目前尚無任何日誌記錄可供匯出喔！");
+                return;
+            }
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(diaryEntries, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `DBT_Diary_Backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        };
+
+        // Import Diary Data from JSON file
+        window.importData = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedEntries = JSON.parse(e.target.result);
+                    if (Array.isArray(importedEntries)) {
+                        diaryEntries = importedEntries;
+                        saveLocalDiaryData();
+                        alert("🎉 日誌備份成功匯入！已更新您的歷史記錄與統計。");
+                        closeModal('loginModal');
+                    } else {
+                        alert("檔案格式不正確，請確認上傳的是 DBT 備份 JSON 檔案。");
+                    }
+                } catch (err) {
+                    alert("讀取檔案失敗，請確認檔案格式是否正確。");
+                }
+            };
+            reader.readAsText(file);
+        };
+
+        function loadLocalDiaryData() {
+            try {
+                const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+                if (raw) {
+                    diaryEntries = JSON.parse(raw);
+                } else {
+                    diaryEntries = [];
+                }
+            } catch(e) {
+                console.warn("LocalStorage access failed:", e);
+                diaryEntries = [];
+            }
+
+            renderDiaryHistory();
+            updateAnalytics();
+            if (!document.getElementById('view-stats').classList.contains('hidden')) {
+                renderChart();
+            }
+        }
+
+        function saveLocalDiaryData() {
+            try {
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(diaryEntries));
+            } catch(e) {
+                console.warn("Could not save to LocalStorage:", e);
+            }
+            renderDiaryHistory();
+            updateAnalytics();
+            if (!document.getElementById('view-stats').classList.contains('hidden')) {
+                renderChart();
+            }
+        }
+
+        window.handleSaveDiary = function(e) {
+            e.preventDefault();
+
+            const mood = parseInt(document.getElementById('moodInput').value);
+            const distress = parseInt(document.getElementById('distressInput').value);
+            const notes = document.getElementById('diaryNotes').value.trim();
+
+            const checkboxes = document.querySelectorAll('input[name="skillsUsed"]:checked');
+            const selectedSkills = Array.from(checkboxes).map(cb => cb.value);
+
+            const newEntry = {
+                id: 'entry_' + Date.now(),
+                date: new Date().toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric' }),
+                fullDate: new Date().toISOString(),
+                mood: mood,
+                distress: distress,
+                skills: selectedSkills,
+                notes: notes
+            };
+
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> 儲存中...`;
+
+            diaryEntries.unshift(newEntry);
+            saveLocalDiaryData();
+
+            document.getElementById('diaryForm').reset();
+            document.getElementById('moodVal').innerText = '5';
+            document.getElementById('distressVal').innerText = '3';
+
+            btn.innerHTML = `<i class="fa-solid fa-check"></i> 儲存成功！`;
+            btn.classList.replace('bg-teal-600', 'bg-emerald-600');
+            setTimeout(() => {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                btn.classList.replace('bg-emerald-600', 'bg-teal-600');
+            }, 1500);
+        };
+
+        window.deleteDiaryEntry = function(entryId) {
+            diaryEntries = diaryEntries.filter(e => e.id !== entryId);
+            saveLocalDiaryData();
+        };
+
+        window.switchTab = function(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-teal-700', 'shadow-sm');
+                btn.classList.add('text-slate-600');
+            });
+
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.add('bg-white', 'text-teal-700', 'shadow-sm');
+            activeBtn.classList.remove('text-slate-600');
+
+            if (tabId === 'stats') {
+                renderChart();
+            }
+        };
+
+        window.showCategorySkills = function(category) {
+            switchTab('library');
+            filterSkills(category);
+        };
+
+        window.openModal = function(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        };
+
+        window.closeModal = function(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        };
+
+        function renderSkillsLibrary() {
+            const container = document.getElementById('skillsContainer');
+            container.innerHTML = '';
+
+            const filtered = currentSkillFilter === 'all' 
+                ? dbtSkills 
+                : dbtSkills.filter(s => s.category === currentSkillFilter);
+
+            filtered.forEach(skill => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:border-teal-500 hover:shadow-md transition cursor-pointer flex flex-col justify-between";
+                card.onclick = () => openSkillDetail(skill.id);
+
+                let catBadge = '';
+                if(skill.category === 'mindfulness') catBadge = '<span class="bg-sky-50 text-sky-600 px-2.5 py-0.5 rounded-full text-xs font-semibold">了了分明</span>';
+                if(skill.category === 'distress') catBadge = '<span class="bg-rose-50 text-rose-600 px-2.5 py-0.5 rounded-full text-xs font-semibold">痛苦承受</span>';
+                if(skill.category === 'emotion') catBadge = '<span class="bg-amber-50 text-amber-600 px-2.5 py-0.5 rounded-full text-xs font-semibold">情緒調節</span>';
+                if(skill.category === 'interpersonal') catBadge = '<span class="bg-emerald-50 text-emerald-600 px-2.5 py-0.5 rounded-full text-xs font-semibold">人際效能</span>';
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            ${catBadge}
+                            <i class="fa-solid fa-circle-info text-slate-300"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-base mb-1">${skill.title}</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed">${skill.short}</p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-teal-600 font-semibold">
+                        <span>查看步驟說明</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        window.filterSkills = function(cat) {
+            currentSkillFilter = cat;
+
+            document.querySelectorAll('.skill-filter-btn').forEach(btn => {
+                if (btn.getAttribute('data-category') === cat) {
+                    btn.className = "skill-filter-btn bg-slate-800 text-white px-3 py-1.5 rounded-full font-medium transition-colors";
+                } else {
+                    btn.className = "skill-filter-btn bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full font-medium hover:bg-slate-200 transition-colors";
+                }
+            });
+
+            renderSkillsLibrary();
+        };
+
+        window.openSkillDetail = function(skillId) {
+            const skill = dbtSkills.find(s => s.id === skillId);
+            if (!skill) return;
+
+            const categoryNameMap = {
+                mindfulness: '了了分明 (Mindfulness)',
+                distress: '痛苦承受 (Distress Tolerance)',
+                emotion: '情緒調節 (Emotion Regulation)',
+                interpersonal: '人際效能 (Interpersonal)'
+            };
+
+            document.getElementById('modalSkillTitle').innerText = skill.title;
+            document.getElementById('modalSkillCategory').innerText = `分類：${categoryNameMap[skill.category] || skill.category}`;
+
+            let stepsHtml = skill.steps.map((step, idx) => `
+                <li class="flex items-start gap-2">
+                    <span class="w-5 h-5 bg-teal-100 text-teal-700 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">${idx + 1}</span>
+                    <span>${step}</span>
+                </li>
+            `).join('');
+
+            document.getElementById('modalSkillContent').innerHTML = `
+                <div>
+                    <h4 class="font-bold text-slate-800 mb-1">技巧核心概念：</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">${skill.desc}</p>
+                </div>
+                <div class="pt-2">
+                    <h4 class="font-bold text-slate-800 mb-2">具體操作步驟：</h4>
+                    <ul class="space-y-2 text-xs text-slate-700">
+                        ${stepsHtml}
+                    </ul>
+                </div>
+            `;
+
+            openModal('skillDetailModal');
+        };
+
+        function renderSkillsChecklist() {
+            const container = document.getElementById('skillsChecklist');
+            container.innerHTML = '';
+
+            dbtSkills.forEach(s => {
+                const label = document.createElement('label');
+                label.className = "flex items-center gap-2 p-2 bg-slate-50 rounded-lg border border-slate-200 cursor-pointer hover:bg-slate-100";
+                
+                const displayTitle = s.title.split('—')[0].split('(')[0].trim();
+
+                label.innerHTML = `
+                    <input type="checkbox" name="skillsUsed" value="${displayTitle}" class="rounded text-teal-600 focus:ring-teal-500 accent-teal-600">
+                    <span class="text-slate-700 font-medium truncate" title="${s.title}">${displayTitle}</span>
+                `;
+                container.appendChild(label);
+            });
+        }
+
+        function renderDiaryHistory() {
+            const container = document.getElementById('diaryHistoryList');
+            container.innerHTML = '';
+
+            if (diaryEntries.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">尚無練習記錄，開始填寫上方的每日表單吧！</p>`;
+                return;
+            }
+
+            diaryEntries.forEach(entry => {
+                const item = document.createElement('div');
+                item.className = "p-3 bg-slate-50 border border-slate-200 rounded-xl flex flex-col gap-1 text-xs relative group";
+                
+                const skillsTags = entry.skills && entry.skills.length > 0 
+                    ? entry.skills.map(s => `<span class="bg-teal-100 text-teal-800 px-2 py-0.5 rounded">${s}</span>`).join(' ')
+                    : `<span class="text-slate-400">未勾選技巧</span>`;
+
+                item.innerHTML = `
+                    <div class="flex justify-between items-center font-bold text-slate-700">
+                        <span>📅 ${entry.date}</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-teal-600">心情: ${entry.mood}/10</span>
+                            <span class="text-rose-600">困擾: ${entry.distress}/10</span>
+                            <button onclick="deleteDiaryEntry('${entry.id}')" class="text-slate-300 hover:text-rose-500 transition ml-1" title="刪除此筆"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-1 my-1">
+                        ${skillsTags}
+                    </div>
+                    ${entry.notes ? `<p class="text-slate-600 italic border-l-2 border-slate-300 pl-2 mt-1">"${entry.notes}"</p>` : ''}
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        window.askAICoach = async function() {
+            const userPrompt = document.getElementById('aiUserPrompt').value.trim();
+            if (!userPrompt) {
+                alert("請先輸入您當前的狀況或心情描述喔！");
+                return;
+            }
+
+            const submitBtn = document.getElementById('aiSubmitBtn');
+            const resultArea = document.getElementById('aiResultArea');
+            const responseText = document.getElementById('aiResponseText');
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> 智慧心思考中...`;
+
+            resultArea.classList.remove('hidden');
+            responseText.innerText = "正在分析您的情境，請稍候...";
+
+            const systemPrompt = `你是一位溫和、專業且充滿同理心的 DBT (辯證行為治療) 心理輔導教練。
+請根據使用者提供的困境或情緒描述：
+1. 先給予一句溫暖、具接納性（Validation）的關懷。
+2. 推薦 1 到 2 個最合適的 DBT 技巧（例如：智慧心、了了分明技巧、STOP、TIPP、核對事實、相反行動、DEAR MAN、GIVE、FAST、認可與傳達理解技巧等）。
+3. 用條列式、簡單易懂的步驟說明現在可以立刻做出的行動。
+語氣請保持平穩、溫柔、不批判。`;
+
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: userPrompt }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    })
+                });
+
+                const data = await response.json();
+                const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (resultText) {
+                    responseText.innerText = resultText;
+                } else {
+                    responseText.innerText = "抱歉，目前暫時無法取得建議，請稍後再試。";
+                }
+            } catch (err) {
+                console.error(err);
+                responseText.innerText = "連線發生錯誤，請重試。";
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> 尋求 DBT 技巧建議`;
+            }
+        };
+
+        function updateAnalytics() {
+            document.getElementById('statTotalDays').innerText = diaryEntries.length;
+
+            if (diaryEntries.length === 0) {
+                document.getElementById('statAvgMood').innerText = "0.0";
+                document.getElementById('statTopSkill').innerText = "尚無資料";
+                return;
+            }
+
+            const avgMood = (diaryEntries.reduce((acc, curr) => acc + (curr.mood || 0), 0) / diaryEntries.length).toFixed(1);
+            document.getElementById('statAvgMood').innerText = avgMood;
+
+            const skillCounts = {};
+            diaryEntries.forEach(entry => {
+                if (entry.skills) {
+                    entry.skills.forEach(s => {
+                        skillCounts[s] = (skillCounts[s] || 0) + 1;
+                    });
+                }
+            });
+
+            let topSkill = "尚無";
+            let maxCount = 0;
+            for (let s in skillCounts) {
+                if (skillCounts[s] > maxCount) {
+                    maxCount = skillCounts[s];
+                    topSkill = s;
+                }
+            }
+            document.getElementById('statTopSkill').innerText = topSkill;
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('trendChart').getContext('2d');
+
+            if (trendChartInstance) {
+                trendChartInstance.destroy();
+            }
+
+            const recentEntries = [...diaryEntries].reverse().slice(-7);
+            const labels = recentEntries.map(e => e.date);
+            const moodData = recentEntries.map(e => e.mood);
+            const distressData = recentEntries.map(e => e.distress);
+
+            trendChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels.length > 0 ? labels : ['無資料'],
+                    datasets: [
+                        {
+                            label: '心情指數 (1-10)',
+                            data: moodData.length > 0 ? moodData : [0],
+                            borderColor: '#0d9488',
+                            backgroundColor: 'rgba(13, 148, 136, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: '困擾值 (1-10)',
+                            data: distressData.length > 0 ? distressData : [0],
+                            borderColor: '#e11d48',
+                            backgroundColor: 'rgba(225, 29, 72, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10,
+                            ticks: { stepSize: 2 }
+                        }
+                    }
+                }
+            });
+        }
+
+        // On Load initialization
+        window.onload = function() {
+            initApp();
+        };
+    </script>
+</body>
+</html>
