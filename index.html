@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DBT 智慧心生活 - 辯證行為治療技巧與練習日誌</title>
+    <title>DBT技巧訓練 - 辯證行為治療技巧與練習日誌</title>
     <!-- Mobile Web App Capable Meta Tags for Fullscreen / PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -80,24 +80,19 @@
                     <i class="fa-solid font-bold fa-brain"></i>
                 </div>
                 <div>
-                    <h1 class="font-bold text-lg text-slate-800 leading-tight">DBT 智慧心生活</h1>
+                    <h1 class="font-bold text-lg text-slate-800 leading-tight">DBT技巧訓練</h1>
                     <p class="text-xs text-slate-500">辯證行為治療 (DBT) 技巧教練</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-2">
-                <a id="hdrStandaloneBtn" href="https://jeansun74.github.io/DBT-APP/" target="_blank" rel="noopener noreferrer" title="在新分頁獨立開啟 APP（避免資料隨 Google Sites iframe 重整遺失）" class="bg-teal-50 hover:bg-teal-100 text-teal-700 text-xs font-semibold px-2.5 py-2 rounded-lg flex items-center gap-1.5 transition border border-teal-200">
-                    <i class="fa-solid fa-up-right-from-square text-sm"></i>
-                    <span class="hidden sm:inline">獨立頁面開啟</span>
-                </a>
-
                 <button onclick="toggleFullscreen()" id="fullscreenBtn" title="切換全螢幕模式" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold p-2 rounded-lg transition flex items-center justify-center">
                     <i class="fa-solid fa-expand text-sm"></i>
                 </button>
 
                 <button onclick="openModal('loginModal')" id="userAuthBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-3 py-2 rounded-lg flex items-center gap-1.5 transition">
                     <i class="fa-solid fa-circle-user text-teal-600 text-sm"></i>
-                    <span id="userStatusText">本機免登入模式</span>
+                    <span id="userStatusText">智慧心夥伴</span>
                 </button>
 
                 <button onclick="openModal('sosModal')" class="bg-rose-500 hover:bg-rose-600 text-white text-xs font-semibold px-3 py-2 rounded-lg flex items-center gap-1.5 shadow-sm transition">
@@ -110,21 +105,6 @@
 
     <!-- Main Body Container -->
     <main class="max-w-4xl mx-auto px-4 py-6 w-full flex-grow">
-        
-        <!-- Google Sites / iframe Notification Banner -->
-        <div id="iframeNoticeBanner" class="hidden bg-amber-50 border border-amber-200 text-amber-900 p-4 mb-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs animate-fade-in">
-            <div class="flex items-start gap-2.5">
-                <i class="fa-solid fa-circle-info text-amber-600 text-base mt-0.5 flex-shrink-0"></i>
-                <div>
-                    <span class="font-bold text-amber-900 block">偵測到內嵌框架 (Google Sites / iframe)</span>
-                    <span class="text-amber-800">為確保您的日誌與統計數據能穩定永久保存在瀏覽器中，建議點擊右側按鈕切換至「獨立全螢幕」頁面操作！</span>
-                </div>
-            </div>
-            <a id="bannerStandaloneBtn" href="https://jeansun74.github.io/DBT-APP/" target="_blank" rel="noopener noreferrer" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-2 rounded-lg whitespace-nowrap transition shadow-sm self-end sm:self-auto flex items-center gap-1">
-                <i class="fa-solid fa-up-right-from-square"></i>
-                <span>獨立全螢幕開啟</span>
-            </a>
-        </div>
 
         <!-- Tab Navigation Bar -->
         <nav class="flex space-x-1 bg-slate-200/70 p-1 rounded-xl mb-6 text-sm font-medium hide-scrollbar overflow-x-auto">
@@ -349,13 +329,15 @@
 
         <!-- TAB 4: GEMINI AI COACH -->
         <section id="view-ai" class="tab-content hidden animate-fade-in space-y-6">
-            <div class="bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-100 p-5 rounded-2xl flex items-center gap-4">
-                <div class="w-12 h-12 bg-teal-600 text-white rounded-xl flex items-center justify-center text-2xl flex-shrink-0 shadow-sm">
-                    <i class="fa-solid fa-robot"></i>
-                </div>
-                <div>
-                    <h2 class="text-lg font-bold text-slate-800">AI DBT 隨身輔導教練</h2>
-                    <p class="text-xs text-slate-600">告訴我你當前遭遇的困難或情緒狀態，AI 將為你推薦最適合的 DBT 技巧與行動指引。</p>
+            <div class="bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-100 p-5 rounded-2xl flex items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-teal-600 text-white rounded-xl flex items-center justify-center text-2xl flex-shrink-0 shadow-sm">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-800">AI DBT 隨身輔導教練</h2>
+                        <p class="text-xs text-slate-600">告訴我你當前遭遇的困難或情緒狀態，AI 將為你推薦最適合的 DBT 技巧與行動指引。</p>
+                    </div>
                 </div>
             </div>
 
@@ -365,7 +347,7 @@
                     <textarea id="aiUserPrompt" rows="3" placeholder="例如：我剛剛跟朋友提出不同意見，但他好像生氣了，我想溝通但不想失去自尊，也不想破壞感情..." class="w-full p-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
                 </div>
 
-                <div class="flex justify-end">
+                <div class="flex justify-end items-center">
                     <button onclick="askAICoach()" id="aiSubmitBtn" class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-5 py-2.5 rounded-xl transition flex items-center gap-2 text-sm">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
                         <span>尋求 DBT 技巧建議</span>
@@ -456,14 +438,14 @@
             <div class="bg-teal-600 text-white p-4 flex justify-between items-center">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-user-gear text-xl"></i>
-                    <h3 class="font-bold text-lg">個人化設定與資料說明</h3>
+                    <h3 class="font-bold text-lg">個人化與資料備份</h3>
                 </div>
                 <button onclick="closeModal('loginModal')" class="text-white/80 hover:text-white">
                     <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
             
-            <div class="p-6 space-y-5">
+            <div class="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
                 <!-- User Profile Display Card -->
                 <div class="bg-teal-50 p-4 rounded-xl border border-teal-100">
                     <div class="flex items-center gap-3">
@@ -481,30 +463,15 @@
                 <div class="space-y-2">
                     <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5">
                         <i class="fa-solid fa-shield-halved text-teal-600"></i>
-                        關於資料儲存與 Google Sites 說明
+                        關於資料儲存與說明
                     </h4>
                     <p class="text-xs text-slate-500 leading-relaxed">
-                        【儲存機制】：資料預設儲存於瀏覽器（LocalStorage）。<br>
-                        【Google Sites 嵌入注意】：Google 協作平台使用嵌入式框架（iframe），瀏覽器可能會在重整時清空框架內的暫存。建議定期使用下方<b>備份功能</b>保存您的心靈日誌！
+                        【儲存機制】：資料均預設儲存於瀏覽器（LocalStorage）。<br>
+                        【Google Sites 內嵌注意】：如果嵌入在 Google Sites 框架內，建議使用下方<b>備份功能</b>保存您的心靈日誌！
                     </p>
                 </div>
 
                 <!-- Backup & Restore Section -->
-                <div class="border-t border-slate-100 pt-3 space-y-2">
-                    <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5">
-                        <i class="fa-solid fa-display text-teal-600"></i>
-                        獨立視窗與全螢幕控制
-                    </h4>
-                    <div class="grid grid-cols-2 gap-2">
-                        <a id="modalStandaloneBtn" href="https://jeansun74.github.io/DBT-APP/" target="_blank" rel="noopener noreferrer" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold p-2 rounded-lg text-xs transition flex items-center justify-center gap-1">
-                            <i class="fa-solid fa-up-right-from-square"></i> 在新分頁開啟
-                        </a>
-                        <button onclick="toggleFullscreen()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold p-2 rounded-lg text-xs transition border border-slate-200 flex items-center justify-center gap-1">
-                            <i class="fa-solid fa-expand"></i> 切換全螢幕
-                        </button>
-                    </div>
-                </div>
-
                 <div class="border-t border-slate-100 pt-3 space-y-2">
                     <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5">
                         <i class="fa-solid fa-file-arrow-down text-teal-600"></i>
@@ -536,38 +503,6 @@
         </div>
     </div>
 
-    <!-- Google Sites Standalone Guide Modal -->
-    <div id="googleSitesGuideModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white max-w-md w-full rounded-2xl shadow-xl overflow-hidden animate-fade-in">
-            <div class="bg-amber-500 text-white p-4 flex justify-between items-center">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-circle-exclamation text-xl"></i>
-                    <h3 class="font-bold text-lg">Google Sites 內嵌說明</h3>
-                </div>
-                <button onclick="closeModal('googleSitesGuideModal')" class="text-white/80 hover:text-white">
-                    <i class="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
-            
-            <div class="p-5 space-y-4 text-xs text-slate-700 leading-relaxed">
-                <p class="font-bold text-slate-800 text-sm">為什麼無法在獨立新頁面開啟？</p>
-                <p>因為您目前是直接將 HTML 程式碼貼在 Google Sites 的「內嵌程式碼」中，Google 並未為此 HTML 檔案提供獨立的 Web 網址，因此瀏覽器基於安全性會禁止開啟沙盒新分頁。</p>
-                
-                <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl space-y-1.5 text-amber-900">
-                    <p class="font-bold">💡 建議的兩種最佳使用方式：</p>
-                    <ol class="list-decimal pl-4 space-y-1">
-                        <li><b>直接使用全螢幕功能</b>：點擊 APP 右上角「全螢幕按鈕」即可放大畫面操作。</li>
-                        <li><b>免費獲得獨立網址</b>：將此 `index.html` 檔案免費上傳至 <b>GitHub Pages</b> 或 <b>Vercel</b>，再將產生的專屬網址貼入 Google Sites，即可完美實現跨裝置 100% 獨立新頁面開啟與持久儲存！</li>
-                    </ol>
-                </div>
-            </div>
-
-            <div class="bg-slate-50 p-4 border-t border-slate-100 flex justify-end">
-                <button onclick="closeModal('googleSitesGuideModal')" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-xs font-semibold">我知道了</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Skill Detail Modal -->
     <div id="skillDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white max-w-lg w-full rounded-2xl shadow-xl overflow-hidden animate-fade-in flex flex-col max-h-[85vh]">
@@ -591,8 +526,34 @@
 
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 mt-12 py-4 text-center text-xs text-slate-400">
-        <p>DBT 智慧心生活 - 大眾心靈練習輔助工具 | 本工具僅供自我練習，無法取代專業心理治療</p>
+        <p>DBT技巧訓練 - 大眾心靈練習輔助工具 | 本工具僅供自我練習，無法取代專業心理治療</p>
     </footer>
+
+    <!-- Initial Welcome & Name Entry Modal -->
+    <div id="welcomeModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white max-w-md w-full rounded-2xl shadow-xl overflow-hidden animate-fade-in">
+            <div class="bg-teal-600 text-white p-6 text-center">
+                <div class="w-16 h-16 bg-white/20 rounded-2xl mx-auto flex items-center justify-center text-3xl mb-3 shadow-inner">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h3 class="font-bold text-xl">歡迎進入 DBT技巧訓練</h3>
+                <p class="text-teal-100 text-xs mt-1">陪伴您找到內心的平衡與智慧</p>
+            </div>
+            
+            <form onsubmit="handleStartWithUser(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-1.5">請輸入您的個人稱呼 / 暱稱：</label>
+                    <input type="text" id="welcomeUsernameInput" placeholder="例如：智慧心夥伴" class="w-full p-3 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500" required>
+                    <p class="text-xs text-slate-400 mt-1.5">練習紀錄與數據僅儲存在您的裝置中，完全保障個人隱私。</p>
+                </div>
+
+                <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3.5 rounded-xl transition shadow-md shadow-teal-100 flex items-center justify-center gap-2">
+                    <span>確認，開始智慧心練習</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
 
     <script>
         // Global variables for local app state
@@ -602,6 +563,8 @@
 
         const LOCAL_STORAGE_KEY = 'dbt_local_diary_entries';
         const LOCAL_USERNAME_KEY = 'dbt_local_username';
+        const LOCAL_APIKEY_KEY = 'dbt_local_gemini_apikey';
+        const EMBEDDED_API_KEY = 'AQ.Ab8RN6LlipEhU5GmMRuxHDMpNVnkI-0eTeHuhDXwqX5wNlyxEA';
 
         // DBT Skills Master Database
         const dbtSkills = [
@@ -803,35 +766,52 @@
         ];
 
         function initApp() {
+            // Read URL parameter if redirected with user name
+            const urlParams = new URLSearchParams(window.location.search);
+            const nameParam = urlParams.get('user') || urlParams.get('name');
+            if (nameParam) {
+                try {
+                    localStorage.setItem(LOCAL_USERNAME_KEY, nameParam);
+                    if (window.history.replaceState) {
+                        window.history.replaceState({}, document.title, window.location.pathname);
+                    }
+                } catch(e) { console.warn(e); }
+            }
+
             loadLocalUserData();
             loadLocalDiaryData();
 
             const todayStr = new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' });
             document.getElementById('diaryDateDisplay').innerText = todayStr;
 
-            setupStandaloneLinks();
             renderSkillsLibrary();
             renderSkillsChecklist();
-            checkIframeEmbed();
+
+            // Prompt welcome name modal if first time
+            checkAndPromptWelcome();
         }
 
-        // Setup official GitHub Pages URL for all standalone buttons
-        function setupStandaloneLinks() {
-            const officialUrl = 'https://jeansun74.github.io/DBT-APP/';
-            const linkIds = ['hdrStandaloneBtn', 'bannerStandaloneBtn', 'modalStandaloneBtn'];
+        function checkAndPromptWelcome() {
+            const savedName = localStorage.getItem(LOCAL_USERNAME_KEY);
+            if (!savedName) {
+                openModal('welcomeModal');
+            }
+        }
+
+        window.handleStartWithUser = function(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('welcomeUsernameInput').value.trim();
+            const name = nameInput || '智慧心夥伴';
             
-            linkIds.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.href = officialUrl;
-                    el.target = '_blank';
-                    el.rel = 'noopener noreferrer';
-                    el.onclick = null;
-                }
-            });
-        }
+            try {
+                localStorage.setItem(LOCAL_USERNAME_KEY, name);
+            } catch(e) { console.warn(e); }
+            
+            document.getElementById('userStatusText').innerText = name;
+            document.getElementById('userDisplayNameDisplay').innerText = name;
+            closeModal('welcomeModal');
+        };
 
-        // Toggle standard browser Fullscreen mode with WebKit / Mobile iOS fallback
         window.toggleFullscreen = function() {
             const btn = document.getElementById('fullscreenBtn');
             const doc = document.documentElement;
@@ -842,18 +822,16 @@
                     doc.requestFullscreen().then(() => {
                         if (btn) btn.innerHTML = '<i class="fa-solid fa-compress text-sm"></i>';
                     }).catch(() => {
-                        showFullscreenFallbackNotice();
+                        alert("您的裝置或瀏覽器暫不支援全螢幕切換。");
                     });
                 } else if (doc.webkitRequestFullscreen) {
                     doc.webkitRequestFullscreen();
                     if (btn) btn.innerHTML = '<i class="fa-solid fa-compress text-sm"></i>';
-                } else {
-                    showFullscreenFallbackNotice();
                 }
             } else {
                 if (document.exitFullscreen) {
                     document.exitFullscreen().then(() => {
-                        if (btn) btn.innerHTML = '<i class="fa-solid fa-compress text-sm"></i>';
+                        if (btn) btn.innerHTML = '<i class="fa-solid fa-expand text-sm"></i>';
                     });
                 } else if (document.webkitExitFullscreen) {
                     document.webkitExitFullscreen();
@@ -862,28 +840,9 @@
             }
         };
 
-        function showFullscreenFallbackNotice() {
-            alert("目前處於內嵌框架中。若點擊全螢幕無反應，建議您直接點擊 APP 右上角的全螢幕圖示，或使用「匯出日誌備份」保存練習紀錄！");
-        }
-
-        // Automatically detect if running inside Google Sites or any iframe
-        function checkIframeEmbed() {
-            try {
-                if (window.self !== window.top) {
-                    const banner = document.getElementById('iframeNoticeBanner');
-                    if (banner) banner.classList.remove('hidden');
-                }
-            } catch (e) {
-                const banner = document.getElementById('iframeNoticeBanner');
-                if (banner) banner.classList.remove('hidden');
-            }
-        }
-
         function loadLocalUserData() {
-            let customName = localStorage.getItem(LOCAL_USERNAME_KEY);
-            if (!customName) {
-                customName = '智慧心夥伴';
-            }
+            let customName = localStorage.getItem(LOCAL_USERNAME_KEY) || '智慧心夥伴';
+
             document.getElementById('userStatusText').innerText = customName;
             document.getElementById('userDisplayNameDisplay').innerText = customName;
             document.getElementById('usernameInput').value = customName === '智慧心夥伴' ? '' : customName;
@@ -896,7 +855,7 @@
             try {
                 localStorage.setItem(LOCAL_USERNAME_KEY, newName);
             } catch(e) {
-                console.warn("Could not save username to LocalStorage:", e);
+                console.warn(e);
             }
             
             document.getElementById('userStatusText').innerText = newName;
@@ -904,7 +863,6 @@
             closeModal('loginModal');
         };
 
-        // Export Diary Data as JSON file
         window.exportData = function() {
             if (diaryEntries.length === 0) {
                 alert("目前尚無任何日誌記錄可供匯出喔！");
@@ -919,7 +877,6 @@
             downloadAnchor.remove();
         };
 
-        // Import Diary Data from JSON file
         window.importData = function(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -946,13 +903,8 @@
         function loadLocalDiaryData() {
             try {
                 const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-                if (raw) {
-                    diaryEntries = JSON.parse(raw);
-                } else {
-                    diaryEntries = [];
-                }
+                diaryEntries = raw ? JSON.parse(raw) : [];
             } catch(e) {
-                console.warn("LocalStorage access failed:", e);
                 diaryEntries = [];
             }
 
@@ -967,7 +919,7 @@
             try {
                 localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(diaryEntries));
             } catch(e) {
-                console.warn("Could not save to LocalStorage:", e);
+                console.warn(e);
             }
             renderDiaryHistory();
             updateAnalytics();
@@ -1200,6 +1152,8 @@
                 return;
             }
 
+            const apiKey = EMBEDDED_API_KEY;
+
             const submitBtn = document.getElementById('aiSubmitBtn');
             const resultArea = document.getElementById('aiResultArea');
             const responseText = document.getElementById('aiResponseText');
@@ -1217,8 +1171,7 @@
 3. 用條列式、簡單易懂的步驟說明現在可以立刻做出的行動。
 語氣請保持平穩、溫柔、不批判。`;
 
-            const apiKey = "";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey.trim()}`;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -1230,6 +1183,11 @@
                     })
                 });
 
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || `HTTP status ${response.status}`);
+                }
+
                 const data = await response.json();
                 const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
@@ -1240,7 +1198,7 @@
                 }
             } catch (err) {
                 console.error(err);
-                responseText.innerText = "連線發生錯誤，請重試。";
+                responseText.innerText = `連線發生錯誤：${err.message}\n請稍後再試。`;
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles"></i> 尋求 DBT 技巧建議`;
