@@ -86,7 +86,7 @@
             </div>
             
             <div class="flex items-center gap-2">
-                <a id="hdrStandaloneBtn" href="#" target="_blank" rel="noopener noreferrer" title="在新分頁獨立開啟 APP（避免資料隨 Google Sites iframe 重整遺失）" class="bg-teal-50 hover:bg-teal-100 text-teal-700 text-xs font-semibold px-2.5 py-2 rounded-lg flex items-center gap-1.5 transition border border-teal-200">
+                <a id="hdrStandaloneBtn" href="https://jeansun74.github.io/DBT-APP/" target="_blank" rel="noopener noreferrer" title="在新分頁獨立開啟 APP（避免資料隨 Google Sites iframe 重整遺失）" class="bg-teal-50 hover:bg-teal-100 text-teal-700 text-xs font-semibold px-2.5 py-2 rounded-lg flex items-center gap-1.5 transition border border-teal-200">
                     <i class="fa-solid fa-up-right-from-square text-sm"></i>
                     <span class="hidden sm:inline">獨立頁面開啟</span>
                 </a>
@@ -120,7 +120,7 @@
                     <span class="text-amber-800">為確保您的日誌與統計數據能穩定永久保存在瀏覽器中，建議點擊右側按鈕切換至「獨立全螢幕」頁面操作！</span>
                 </div>
             </div>
-            <a id="bannerStandaloneBtn" href="#" target="_blank" rel="noopener noreferrer" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-2 rounded-lg whitespace-nowrap transition shadow-sm self-end sm:self-auto flex items-center gap-1">
+            <a id="bannerStandaloneBtn" href="https://jeansun74.github.io/DBT-APP/" target="_blank" rel="noopener noreferrer" class="bg-amber-600 hover:bg-amber-700 text-white font-semibold px-3 py-2 rounded-lg whitespace-nowrap transition shadow-sm self-end sm:self-auto flex items-center gap-1">
                 <i class="fa-solid fa-up-right-from-square"></i>
                 <span>獨立全螢幕開啟</span>
             </a>
@@ -496,7 +496,7 @@
                         獨立視窗與全螢幕控制
                     </h4>
                     <div class="grid grid-cols-2 gap-2">
-                        <a id="modalStandaloneBtn" href="#" target="_blank" rel="noopener noreferrer" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold p-2 rounded-lg text-xs transition flex items-center justify-center gap-1">
+                        <a id="modalStandaloneBtn" href="https://jeansun74.github.io/DBT-APP/" target="_blank" rel="noopener noreferrer" class="bg-teal-600 hover:bg-teal-700 text-white font-semibold p-2 rounded-lg text-xs transition flex items-center justify-center gap-1">
                             <i class="fa-solid fa-up-right-from-square"></i> 在新分頁開啟
                         </a>
                         <button onclick="toggleFullscreen()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold p-2 rounded-lg text-xs transition border border-slate-200 flex items-center justify-center gap-1">
@@ -815,32 +815,18 @@
             checkIframeEmbed();
         }
 
-        // Setup real <a> link href tags or show Google Sites Sandbox modal if embedded as raw code
+        // Setup official GitHub Pages URL for all standalone buttons
         function setupStandaloneLinks() {
-            const currentUrl = window.location.href;
-            const isGoogleSandbox = currentUrl.includes('googleusercontent.com') || currentUrl.startsWith('data:') || currentUrl.startsWith('about:');
-
+            const officialUrl = 'https://jeansun74.github.io/DBT-APP/';
             const linkIds = ['hdrStandaloneBtn', 'bannerStandaloneBtn', 'modalStandaloneBtn'];
             
             linkIds.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) {
-                    if (isGoogleSandbox) {
-                        // If raw embed inside Google Sites, prevent navigation error and show helpful guide
-                        el.removeAttribute('href');
-                        el.removeAttribute('target');
-                        el.style.cursor = 'pointer';
-                        el.onclick = function(e) {
-                            e.preventDefault();
-                            openModal('googleSitesGuideModal');
-                        };
-                    } else {
-                        // If hosted on real Web host (GitHub Pages, Vercel, Netlify, etc.)
-                        el.href = currentUrl;
-                        el.target = '_blank';
-                        el.rel = 'noopener noreferrer';
-                        el.onclick = null;
-                    }
+                    el.href = officialUrl;
+                    el.target = '_blank';
+                    el.rel = 'noopener noreferrer';
+                    el.onclick = null;
                 }
             });
         }
