@@ -9,7 +9,7 @@
     <!-- Mobile Web App Capable Meta Tags for Fullscreen / PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="DBT 智慧心">
+    <meta name="apple-mobile-web-app-title" content="DBT技巧訓練">
     <meta name="mobile-web-app-capable" content="yes">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -318,14 +318,25 @@
 
             <!-- History Logs Section -->
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                <h3 class="font-bold text-slate-800 text-lg mb-4">歷史記錄</h3>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-slate-800 text-lg">歷史記錄</h3>
+                    <div class="flex gap-2">
+                        <button onclick="exportData()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-download"></i> 備份
+                        </button>
+                        <label class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1 cursor-pointer">
+                            <i class="fa-solid fa-upload"></i> 還原
+                            <input type="file" accept=".json" onchange="importData(event)" class="hidden">
+                        </label>
+                    </div>
+                </div>
                 <div id="diaryHistoryList" class="space-y-3 max-h-80 overflow-y-auto pr-1">
                     <!-- History items will be injected here -->
                 </div>
             </div>
         </section>
 
-        <!-- TAB 5: STATS & ANALYTICS -->
+        <!-- TAB 4: STATS & ANALYTICS -->
         <section id="view-stats" class="tab-content hidden animate-fade-in space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center">
@@ -392,7 +403,7 @@
         </div>
     </div>
 
-    <!-- User Login & Account Modal -->
+    <!-- User Account Modal -->
     <div id="loginModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white max-w-md w-full rounded-2xl shadow-xl overflow-hidden animate-fade-in">
             <div class="bg-teal-600 text-white p-4 flex justify-between items-center">
@@ -415,7 +426,7 @@
                         <div class="overflow-hidden flex-1">
                             <h4 id="userDisplayNameDisplay" class="font-bold text-slate-800 text-sm truncate">智慧心夥伴</h4>
                             <p class="text-xs text-slate-500 truncate">本機免登入模式</p>
-                            <span class="inline-block mt-1 bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-semibold">LocalStorage 自動儲存</span>
+                            <span id="storageStatusBadge" class="inline-block mt-1 bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-semibold">本機雙重備份保護中</span>
                         </div>
                     </div>
                 </div>
@@ -423,11 +434,11 @@
                 <div class="space-y-2">
                     <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5">
                         <i class="fa-solid fa-shield-halved text-teal-600"></i>
-                        關於資料儲存與說明
+                        關於資料儲存與保護
                     </h4>
                     <p class="text-xs text-slate-500 leading-relaxed">
-                        【儲存機制】：資料均預設儲存於瀏覽器（LocalStorage）。<br>
-                        【Google Sites 內嵌注意】：如果嵌入在 Google Sites 框架內，建議使用下方<b>備份功能</b>保存您的心靈日誌！
+                        【雙重保護】：練習紀錄預設自動存於本機 LocalStorage 與 IndexedDB 雙重資料庫中，即使重整頁面也不會遺失。<br>
+                        【完全隱私】：所有心靈資料 100% 留存在您的裝置中，不傳送至外部伺服器。
                     </p>
                 </div>
 
@@ -515,6 +526,7 @@
         </div>
     </div>
 
+    <!-- JavaScript Logic -->
     <script>
         // Global variables for local app state
         let diaryEntries = [];
@@ -523,6 +535,82 @@
 
         const LOCAL_STORAGE_KEY = 'dbt_local_diary_entries';
         const LOCAL_USERNAME_KEY = 'dbt_local_username';
+        const memoryStore = {};
+
+        // Safe Storage Wrappers (Preventing crashes in restricted browser environments)
+        function safeGetStorage(key) {
+            try {
+                if (typeof window !== 'undefined' && window.localStorage) {
+                    return window.localStorage.getItem(key);
+                }
+            } catch(e) {
+                console.warn('LocalStorage read restricted:', e);
+            }
+            return memoryStore[key] || null;
+        }
+
+        function safeSetStorage(key, value) {
+            try {
+                if (typeof window !== 'undefined' && window.localStorage) {
+                    window.localStorage.setItem(key, value);
+                }
+            } catch(e) {
+                console.warn('LocalStorage write restricted:', e);
+            }
+            memoryStore[key] = value;
+        }
+
+        // IndexedDB Backup Database Support
+        function initIndexedDB() {
+            if (!('indexedDB' in window)) return;
+            try {
+                const request = indexedDB.open('DBTAppDB', 1);
+                request.onupgradeneeded = function(e) {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains('diaryStore')) {
+                        db.createObjectStore('diaryStore', { keyPath: 'id' });
+                    }
+                };
+                request.onsuccess = function(e) {
+                    const db = e.target.result;
+                    // Auto restore from IndexedDB if local memory/localStorage was empty
+                    if (diaryEntries.length === 0) {
+                        try {
+                            const tx = db.transaction('diaryStore', 'readonly');
+                            const store = tx.objectStore('diaryStore');
+                            const getAll = store.getAll();
+                            getAll.onsuccess = function() {
+                                if (getAll.result && getAll.result.length > 0) {
+                                    diaryEntries = getAll.result.sort((a,b) => new Date(b.fullDate || 0) - new Date(a.fullDate || 0));
+                                    renderDiaryHistory();
+                                    updateAnalytics();
+                                    safeSetStorage(LOCAL_STORAGE_KEY, JSON.stringify(diaryEntries));
+                                }
+                            };
+                        } catch(err) { console.warn('IndexedDB read error:', err); }
+                    }
+                };
+            } catch(err) {
+                console.warn('IndexedDB init failed:', err);
+            }
+        }
+
+        function syncToIndexedDB(entries) {
+            if (!('indexedDB' in window)) return;
+            try {
+                const request = indexedDB.open('DBTAppDB', 1);
+                request.onsuccess = function(e) {
+                    const db = e.target.result;
+                    const tx = db.transaction('diaryStore', 'readwrite');
+                    const store = tx.objectStore('diaryStore');
+                    store.clear().onsuccess = function() {
+                        entries.forEach(item => store.put(item));
+                    };
+                };
+            } catch(err) {
+                console.warn('IndexedDB sync error:', err);
+            }
+        }
 
         // DBT Skills Master Database
         const dbtSkills = [
@@ -665,6 +753,19 @@
                     '完全且徹底地做相反動作（生氣時：保持距離、語氣放軟；憂鬱時：起身出門散步）。'
                 ]
             },
+            {
+                id: 'abc-please',
+                category: 'emotion',
+                title: 'ABC PLEASE 技巧 — 累積正向經驗與降低情緒脆弱性',
+                short: 'ABC (累積正向、建立精熟、預先應對) + PLEASE (生理基礎照顧)，從源頭減少情緒爆發。',
+                desc: 'ABC PLEASE 是情緒調節模組中用於降低情緒脆弱性（Emotional Vulnerability）與增加情緒韌性的核心技巧。透過日常生理照顧與積極行動規劃，讓情緒系統更加穩健平穩。',
+                steps: [
+                    'A (累積正向情緒 Accumulate Positive)：每天安排至少一件帶給自己愉悅的小事並全心投入。',
+                    'B (建立精熟感 Build Mastery)：每天完成一件難度適中但能帶給自己「我做得到」成就感的任務。',
+                    'C (預先應對 Cope Ahead)：針對未來可預見的壓力或情緒挑戰，提前規劃並在腦中演練應對策略。',
+                    'PLEASE (生理基礎照顧)：Treat Physical illness(治療疾病)、Balanced Eating(均衡飲食)、Avoid mood-altering substances(避免影響情緒之物質)、Balanced Sleep(充足睡眠)、Get Exercise(規律運動)。'
+                ]
+            },
             // 人際效能 (Interpersonal)
             {
                 id: 'dear-man',
@@ -729,7 +830,7 @@
             const nameParam = urlParams.get('user') || urlParams.get('name');
             if (nameParam) {
                 try {
-                    localStorage.setItem(LOCAL_USERNAME_KEY, nameParam);
+                    safeSetStorage(LOCAL_USERNAME_KEY, nameParam);
                     if (window.history.replaceState) {
                         window.history.replaceState({}, document.title, window.location.pathname);
                     }
@@ -738,6 +839,7 @@
 
             loadLocalUserData();
             loadLocalDiaryData();
+            initIndexedDB();
 
             const todayStr = new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' });
             document.getElementById('diaryDateDisplay').innerText = todayStr;
@@ -750,7 +852,7 @@
         }
 
         function checkAndPromptWelcome() {
-            const savedName = localStorage.getItem(LOCAL_USERNAME_KEY);
+            const savedName = safeGetStorage(LOCAL_USERNAME_KEY);
             if (!savedName) {
                 openModal('welcomeModal');
             }
@@ -761,9 +863,7 @@
             const nameInput = document.getElementById('welcomeUsernameInput').value.trim();
             const name = nameInput || '智慧心夥伴';
             
-            try {
-                localStorage.setItem(LOCAL_USERNAME_KEY, name);
-            } catch(e) { console.warn(e); }
+            safeSetStorage(LOCAL_USERNAME_KEY, name);
             
             document.getElementById('userStatusText').innerText = name;
             document.getElementById('userDisplayNameDisplay').innerText = name;
@@ -799,7 +899,7 @@
         };
 
         function loadLocalUserData() {
-            let customName = localStorage.getItem(LOCAL_USERNAME_KEY) || '智慧心夥伴';
+            let customName = safeGetStorage(LOCAL_USERNAME_KEY) || '智慧心夥伴';
 
             document.getElementById('userStatusText').innerText = customName;
             document.getElementById('userDisplayNameDisplay').innerText = customName;
@@ -810,11 +910,7 @@
             const nameInput = document.getElementById('usernameInput').value.trim();
             const newName = nameInput || '智慧心夥伴';
             
-            try {
-                localStorage.setItem(LOCAL_USERNAME_KEY, newName);
-            } catch(e) {
-                console.warn(e);
-            }
+            safeSetStorage(LOCAL_USERNAME_KEY, newName);
             
             document.getElementById('userStatusText').innerText = newName;
             document.getElementById('userDisplayNameDisplay').innerText = newName;
@@ -860,7 +956,7 @@
 
         function loadLocalDiaryData() {
             try {
-                const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+                const raw = safeGetStorage(LOCAL_STORAGE_KEY);
                 diaryEntries = raw ? JSON.parse(raw) : [];
             } catch(e) {
                 diaryEntries = [];
@@ -874,11 +970,9 @@
         }
 
         function saveLocalDiaryData() {
-            try {
-                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(diaryEntries));
-            } catch(e) {
-                console.warn(e);
-            }
+            safeSetStorage(LOCAL_STORAGE_KEY, JSON.stringify(diaryEntries));
+            syncToIndexedDB(diaryEntries);
+
             renderDiaryHistory();
             updateAnalytics();
             if (!document.getElementById('view-stats').classList.contains('hidden')) {
@@ -1136,52 +1230,59 @@
         }
 
         function renderChart() {
-            const ctx = document.getElementById('trendChart').getContext('2d');
+            const chartCanvas = document.getElementById('trendChart');
+            if (!chartCanvas || typeof Chart === 'undefined') return;
 
-            if (trendChartInstance) {
-                trendChartInstance.destroy();
-            }
+            try {
+                const ctx = chartCanvas.getContext('2d');
 
-            const recentEntries = [...diaryEntries].reverse().slice(-7);
-            const labels = recentEntries.map(e => e.date);
-            const moodData = recentEntries.map(e => e.mood);
-            const distressData = recentEntries.map(e => e.distress);
+                if (trendChartInstance) {
+                    trendChartInstance.destroy();
+                }
 
-            trendChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels.length > 0 ? labels : ['無資料'],
-                    datasets: [
-                        {
-                            label: '心情指數 (1-10)',
-                            data: moodData.length > 0 ? moodData : [0],
-                            borderColor: '#0d9488',
-                            backgroundColor: 'rgba(13, 148, 136, 0.1)',
-                            tension: 0.3,
-                            fill: true
-                        },
-                        {
-                            label: '困擾值 (1-10)',
-                            data: distressData.length > 0 ? distressData : [0],
-                            borderColor: '#e11d48',
-                            backgroundColor: 'rgba(225, 29, 72, 0.1)',
-                            tension: 0.3,
-                            fill: true
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            min: 0,
-                            max: 10,
-                            ticks: { stepSize: 2 }
+                const recentEntries = [...diaryEntries].reverse().slice(-7);
+                const labels = recentEntries.map(e => e.date);
+                const moodData = recentEntries.map(e => e.mood);
+                const distressData = recentEntries.map(e => e.distress);
+
+                trendChartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels.length > 0 ? labels : ['無資料'],
+                        datasets: [
+                            {
+                                label: '心情指數 (1-10)',
+                                data: moodData.length > 0 ? moodData : [0],
+                                borderColor: '#0d9488',
+                                backgroundColor: 'rgba(13, 148, 136, 0.1)',
+                                tension: 0.3,
+                                fill: true
+                            },
+                            {
+                                label: '困擾值 (1-10)',
+                                data: distressData.length > 0 ? distressData : [0],
+                                borderColor: '#e11d48',
+                                backgroundColor: 'rgba(225, 29, 72, 0.1)',
+                                tension: 0.3,
+                                fill: true
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                min: 0,
+                                max: 10,
+                                ticks: { stepSize: 2 }
+                            }
                         }
                     }
-                }
-            });
+                });
+            } catch(e) {
+                console.warn('Chart render error:', e);
+            }
         }
 
         // On Load initialization
